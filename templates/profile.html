@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Особистий кабінет</h1>
+    <p>Привіт, <strong>{{ user.username }}</strong>!</p>
+
+    <h2>Статистика</h2>
+    <ul>
+        <li>Зіграно ігор: <strong>{{ stats.total_games }}</strong></li>
+        <li>Перемог: <strong>{{ stats.wins }}</strong></li>
+        <li>Поразок: <strong>{{ stats.losses }}</strong></li>
+        <li>Відсоток перемог: <strong>{{ stats.win_percentage }}%</strong></li>
+    </ul>
+
+    <h2>Історія ігор</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Результат</th>
+                <th>Спроби</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ game.created_at }}</td>
+                    <td>{{ game.result }}</td>
+                    <td>{{ game.attempts_left }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">У вас ще немає ігор</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
