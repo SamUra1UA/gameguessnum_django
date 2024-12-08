@@ -1,1 +1,1 @@
-web: gunicorn guessnumbergame.wsgi
+web: gunicorn guessnumbergame.wsgi:application
