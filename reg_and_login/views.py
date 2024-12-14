@@ -28,24 +28,37 @@ def profile(request):
     games = GameSession.objects.filter(user=request.user).order_by('-created_at')
 
     # Обчислити статистику
-    stats = {
-        "total_games": games.count(),
-        "wins": games.filter(result="Win").count(),
-        "losses": games.filter(result="Lose").count(),
-    }
-    if stats["total_games"] > 0:
-        stats["win_percentage"] = round(stats["wins"] * 100 / stats["total_games"], 2)
-        stats["loss_percentage"] = round(stats["losses"] * 100 / stats["total_games"], 2)
+    total_games = games.count()
+    wins = games.filter(result="Win").count()
+    losses = games.filter(result="Lose").count()
+
+    if total_games > 0:
+        win_percentage = round((wins / total_games) * 100, 2)
+        loss_percentage = round((losses / total_games) * 100, 2)
     else:
-        stats["win_percentage"] = stats["loss_percentage"] = 0
+        win_percentage = loss_percentage = 0
 
-    return render(request, "profile.html", {"games": games, "stats": stats})
+    stats = {
+        "total_games": total_games,
+        "wins": wins,
+        "losses": losses,
+        "win_percentage": win_percentage,
+        "loss_percentage": loss_percentage,
+    }
+
+    return render(request, "profile.html", {"user": request.user, "games": games, "stats": stats})
 
 
+from django.db.models import Count
 from django.shortcuts import render
+from gamemodel.models import GameSession
 
 def home(request):
-    return render(request, 'home.html')
+    # Знайти топ 25 гравців за кількістю перемог у всіх іграх
+    top_players = GameSession.objects.values('user__username').annotate(wins=Count('id')).order_by('-wins')[:25]
+
+    return render(request, 'home.html', {'top_players': top_players})
+
 
 def logout_view(request):
     if request.method == 'POST':

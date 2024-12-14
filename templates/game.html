@@ -3,17 +3,42 @@
 <div class="container">
     <h1>Гра "Вгадай число"</h1>
     <p>Кількість залишених спроб: <strong>{{ attempts_left }}</strong></p>
+    <p>Поточний діапазон: <strong>{{ range }}</strong></p>
+
     {% if hint %}
         <div class="alert alert-info">
             <p>Підказка: <strong>{{ hint }}</strong></p>
         </div>
     {% endif %}
+
+    {% if proximity_percentage is not none %}
+        <div style="margin: 20px 0; text-align: center;">
+            <p>Індикатор близькості:</p>
+            <div 
+                style="
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    background-color: hsl({{ proximity_percentage|floatformat:0 }}, 100%, 50%);
+                    box-shadow: 0 0 15px hsl({{ proximity_percentage|floatformat:0 }}, 100%, 50%);
+                    margin: 0 auto;
+                ">
+            </div>
+            <p>{{ proximity_percentage }}%</p>
+        </div>
+    {% endif %}
+
     <form method="post">
         {% csrf_token %}
         <input type="number" name="guess" placeholder="Ваше число" required>
         <button type="submit" class="btn btn-primary">Спробувати</button>
     </form>
 
-    
+    <h3>Історія ваших спроб:</h3>
+    <ul>
+        {% for number in history %}
+            <li>{{ number }}</li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center">
+    <h1>Оберіть рівень складності</h1>
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <!-- Легкий рівень -->
+        <a href="{% url 'start_game' 'easy' %}" class="btn btn-success btn-lg">
+            Легко<br><small>10 спроб, розбіжність 0-100</small>
+        </a>
+        <!-- Середній рівень -->
+        <a href="{% url 'start_game' 'medium' %}" class="btn btn-warning btn-lg">
+            Середньо<br><small>5 спроб, розбіжність 0-100</small>
+        </a>
+        <!-- Тяжкий рівень -->
+        <a href="{% url 'start_game' 'hard' %}" class="btn btn-danger btn-lg">
+            Тяжко<br><small>3 спроби, розбіжність 0-500</small>
+        </a>
+    </div>
+</div>
+{% endblock %}
